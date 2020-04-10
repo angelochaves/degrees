@@ -92,10 +92,25 @@ def shortest_path(source, target):
     If no possible path, returns None.
     """
 
-    # TODO
-    raise NotImplementedError
+    # goal state
+    # tuple[1] == target
 
+    #self.start = source
+    #self.goal = target
 
+    start = Node(state=source, parent=None, action=None)
+    frontier = QueueFrontier()
+
+    """
+    teste = people[source]["name"]
+    filmes = people[source]["movies"]
+    for mov in filmes:
+        titfilmes = movies[mov]["title"]
+        print(titfilmes)    
+    #usar QueueFrontier
+    print(f"source: {teste}, target: {target}")
+    """
+    
 def person_id_for_name(name):
     """
     Returns the IMDB id for a person's name,
