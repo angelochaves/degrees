@@ -92,14 +92,47 @@ def shortest_path(source, target):
     If no possible path, returns None.
     """
 
-    # goal state
-    # tuple[1] == target
-
-    #self.start = source
-    #self.goal = target
-
-    start = Node(state=source, parent=None, action=None)
+    start = (None, source)
+    
+    start = Node(state=start, parent=None, action=None)
     frontier = QueueFrontier()
+    frontier.add(start)
+
+    # Initialize an empty explored set
+    explored = set()
+
+    # Keep looping until solution found
+    while True:
+
+        # If nothing left in frontier, then no path
+        if frontier.empty():
+            raise Exception("None")
+
+        # Choose a node from the frontier
+        node = frontier.remove()
+        #self.num_explored += 1
+
+        # If node is the goal, then we have a solution
+        if node.state[1] == target:
+            actions = []
+            cells = []
+            while node.parent is not None:
+                actions.append(node.action)
+                cells.append(node.state)
+                node = node.parent
+            actions.reverse()
+            cells.reverse()
+            self.solution = (actions, cells)
+            return
+
+        # Mark node as explored
+        explored.add(node.state)
+
+        # Add neighbors to frontier
+        for action, state in self.neighbors(node.state):
+            if not frontier.contains_state(state) and state not in explored:
+                child = Node(state=state, parent=node, action=action)
+                frontier.add(child)
 
     """
     teste = people[source]["name"]
