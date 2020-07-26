@@ -116,29 +116,22 @@ def shortest_path(source, target):
         # Mark node as already explored
         explored.add(node.state)
 
-        """
-        IMPLEMENTAÇÃO COMO ESTÁ FEITA, ESTÁ SEMPRE DESCARTANDO 1 POSSIBILIDADE DE CAMINHO VÁLIDO POR ADICIONA
-        O NÓ APENAS PARA REMOVÊLO NO PRÓXIMO LOOP SEM TESTÁ-LO
-
-        PRECISA TESTAR ANTES DE EXPANDIR O NÓ
-        """
+        # Checking if the new node is the target
+        if node.state == target:
+            path = []
+            # Node assumes the value of newNode to promote recursiveness
+            while node.parent is not None:
+                path.append((node.action,node.state))
+                node = node.parent
+            # To correct the order of appearence of path
+            path.reverse()
+            return path
 
         # Expand the node
         neighbours = neighbors_for_person(node.state)
         for movie, artist in neighbours:
             if not frontier.contains_state(artist) and artist not in explored:
                 newNode = Node(state=artist, parent=node, action=movie)
-                # Checking if the new node is the target
-                if newNode.state == target:
-                    path = []
-                    # Node assumes the value of newNode to promote recursiveness
-                    node = newNode
-                    while node.parent is not None:
-                        path.append((node.action,node.state))
-                        node = node.parent
-                    # To correct the order of appearence of path
-                    path.reverse()
-                    return path
                 frontier.add(newNode)
 
 def person_id_for_name(name):
