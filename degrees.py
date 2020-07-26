@@ -91,59 +91,56 @@ def shortest_path(source, target):
 
     If no possible path, returns None.
     """
+    # Check for source == target for some reason
+    if source == target:
+        sys.exit("There is no point of doing that!")
 
-    start = (None, source)
-    
-    start = Node(state=start, parent=None, action=None)
+    # Initializing the first node as the source
+    start = Node(state=source, parent=None, action=None)
     frontier = QueueFrontier()
     frontier.add(start)
 
-    # Initialize an empty explored set
+    # Creating an empty explored set
     explored = set()
 
-    # Keep looping until solution found
+    # Exploring until find a solution
     while True:
 
-        # If nothing left in frontier, then no path
+        # If frontier is empty, no solution
         if frontier.empty():
-            raise Exception("None")
+            return None
 
-        # Choose a node from the frontier
+        # Removing a node from the frontier
         node = frontier.remove()
-        #self.num_explored += 1
 
-        # If node is the goal, then we have a solution
-        if node.state[1] == target:
-            actions = []
-            cells = []
-            while node.parent is not None:
-                actions.append(node.action)
-                cells.append(node.state)
-                node = node.parent
-            actions.reverse()
-            cells.reverse()
-            self.solution = (actions, cells)
-            return
-
-        # Mark node as explored
+        # Mark node as already explored
         explored.add(node.state)
 
-        # Add neighbors to frontier
-        for action, state in self.neighbors(node.state):
-            if not frontier.contains_state(state) and state not in explored:
-                child = Node(state=state, parent=node, action=action)
-                frontier.add(child)
+        """
+        IMPLEMENTAÇÃO COMO ESTÁ FEITA, ESTÁ SEMPRE DESCARTANDO 1 POSSIBILIDADE DE CAMINHO VÁLIDO POR ADICIONA
+        O NÓ APENAS PARA REMOVÊLO NO PRÓXIMO LOOP SEM TESTÁ-LO
 
-    """
-    teste = people[source]["name"]
-    filmes = people[source]["movies"]
-    for mov in filmes:
-        titfilmes = movies[mov]["title"]
-        print(titfilmes)    
-    #usar QueueFrontier
-    print(f"source: {teste}, target: {target}")
-    """
-    
+        PRECISA TESTAR ANTES DE EXPANDIR O NÓ
+        """
+
+        # Expand the node
+        neighbours = neighbors_for_person(node.state)
+        for movie, artist in neighbours:
+            if not frontier.contains_state(artist) and artist not in explored:
+                newNode = Node(state=artist, parent=node, action=movie)
+                # Checking if the new node is the target
+                if newNode.state == target:
+                    path = []
+                    # Node assumes the value of newNode to promote recursiveness
+                    node = newNode
+                    while node.parent is not None:
+                        path.append((node.action,node.state))
+                        node = node.parent
+                    # To correct the order of appearence of path
+                    path.reverse()
+                    return path;
+                frontier.add(newNode)
+
 def person_id_for_name(name):
     """
     Returns the IMDB id for a person's name,
