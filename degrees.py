@@ -138,7 +138,7 @@ def shortest_path(source, target):
                         node = node.parent
                     # To correct the order of appearence of path
                     path.reverse()
-                    return path;
+                    return path
                 frontier.add(newNode)
 
 def person_id_for_name(name):
